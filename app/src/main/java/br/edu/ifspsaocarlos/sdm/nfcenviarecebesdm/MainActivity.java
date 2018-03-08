@@ -1,10 +1,12 @@
 package br.edu.ifspsaocarlos.sdm.nfcenviarecebesdm;
 
+import android.content.Intent;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.tech.Ndef;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -86,4 +88,60 @@ public class MainActivity extends AppCompatActivity {
         adaptadorNFC.setNdefPushMessage(mensagemNdef, this);
     }
 
+    /* Chamado pelo SO quando ACTION_NDEF_DISCOVERED é lançada */
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        // Vai tratar o recebimendo e visualização da mensagem
+        recebeMensagemNdef(intent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        recebeMensagemNdef(getIntent());
+    }
+
+    private void recebeMensagemNdef(Intent intent) {
+        /* Se uma mensagem NDEF foi identificada, receber a mensagem */
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
+            /* Extrai um vetor de Mensagem NDEF dos parâmetros da Intent */
+            Parcelable[] mensagensNdefRecebidas =  intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+
+            /* Se o vetor não está vazio */
+            if(mensagensNdefRecebidas != null) {
+                /* Parseia a Mensagem NDEF da primeira posição que, pela nossa implementação, é
+                * única */
+                NdefMessage mensagemNdefRecebida = (NdefMessage) mensagensNdefRecebidas[0];
+
+                /* Extrai um vetor de Registros NDEF da Mensagem NDEF */
+                NdefRecord[] registroNdefMensagemRececida = mensagemNdefRecebida.getRecords();
+
+                /* O vetor de registros deve conter 2 registros, o primeiro que é o registro do
+                *  aplicativo e o segundo que é o registro que contém o payload (mensagem de texto)*/
+                for (NdefRecord record : registroNdefMensagemRececida) {
+                    String mensagemTexto = new String(record.getPayload());
+
+                    if (mensagemTexto.equals(getPackageName())) {
+                        /* Se for o registro de aplicativo, mostra uma mensagem com o aplicativo
+                        * remetente */
+                        Toast.makeText(this, "Recebida de: " + mensagemTexto, Toast.LENGTH_LONG).show();
+                        continue;
+                    }
+                    else {
+                        /* Se for o registro da mensagem de texto, mostra a mensagem no TextView*/
+                        mensagemRecebidaTV.setText(mensagemTexto);
+                        /* Ativa a UI para que uma nova mensagem de texto possa ser digitada */
+                        ativaUI(true);
+	                    /* Limpa o Edit Text */
+                        mensagemEnviarET.setText("");
+                    }
+                }
+            }
+            else {
+                /* Se nenhuma mensagem de texto foi recebida */
+                Toast.makeText(this, "Nenhuma mensagem recebida", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 }
