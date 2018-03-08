@@ -2,4 +2,6 @@
     <string name="app_name">NFCEnviaRecebeSDM</string>
     <string name="prepara_envio">Prepara envio</string>
     <string name="mensagem_recebida">Mensagem recebida</string>
+    <string name="adaptador_nfc_necessario">Adaptador NFC necessário</string>
+    <string name="mensagem_preparada">Mensagem preparada para envio</string>
 </resources>
