@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
                     if (mensagemTexto.equals(getPackageName())) {
                         /* Se for o registro de aplicativo, mostra uma mensagem com o aplicativo
                         * remetente */
-                        Toast.makeText(this, "Recebida de: " + mensagemTexto, Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, getString(R.string.recebida_de) + mensagemTexto, Toast.LENGTH_LONG).show();
                         continue;
                     }
                     else {
@@ -140,8 +140,38 @@ public class MainActivity extends AppCompatActivity {
             }
             else {
                 /* Se nenhuma mensagem de texto foi recebida */
-                Toast.makeText(this, "Nenhuma mensagem recebida", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.nenhuma_mensagem_recebida, Toast.LENGTH_LONG).show();
             }
+        }
+    }
+
+    /* Salva o texto da mensagem a enviar e o estado da UI */
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        // Apesar da implementação padrão salvar os EditTexts automaticamente, forçaremos
+        outState.putString(MENSAGEM_ENVIAR, mensagemEnviarET.getText().toString());
+        outState.putString(MENSAGEM_RECEBIDA, mensagemRecebidaTV.getText().toString());
+
+        // Como o estado da ativação do Botão e do EditText estão ligados, basta passar um deles
+        outState.putBoolean(ESTADO_UI, mensagemEnviarET.isEnabled());
+    }
+
+    /* Restaura o texto da mensagem a enviar e o estado da UI */
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null) {
+            String mensagemEnviar = savedInstanceState.getString(MENSAGEM_ENVIAR);
+            if (mensagemEnviar != null) {
+                mensagemEnviarET.setText(mensagemEnviar);
+            }
+            String mensagemRecebida = savedInstanceState.getString(MENSAGEM_RECEBIDA);
+            if (mensagemRecebida != null) {
+                mensagemRecebidaTV.setText(mensagemRecebida);
+            }
+            boolean estadoUI = savedInstanceState.getBoolean(ESTADO_UI);
+            ativaUI(estadoUI);
         }
     }
 }

@@ -4,4 +4,6 @@
     <string name="mensagem_recebida">Mensagem recebida</string>
     <string name="adaptador_nfc_necessario">Adaptador NFC necessário</string>
     <string name="mensagem_preparada">Mensagem preparada para envio</string>
+    <string name="recebida_de">Recebida de:</string>
+    <string name="nenhuma_mensagem_recebida">Nenhuma mensagem recebida</string>
 </resources>
