@@ -7,6 +7,15 @@
     android:layout_height="match_parent"
     tools:context="br.edu.ifspsaocarlos.sdm.nfcenviarecebesdm.MainActivity">
 
+    <!-- Botão para abertura de Contato Picker -->
+    <Button
+        android:id="@+id/buttonSelecionaContato"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="selecionaContato"
+        android:text="Seleciona contato"
+        android:layout_centerHorizontal="true" />
+
     <!-- Campo para digitar a mensagem que será enviada -->
     <EditText
         android:id="@+id/et_mensagem_enviar"

@@ -1,13 +1,17 @@
 package br.edu.ifspsaocarlos.sdm.nfcenviarecebesdm;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
 import android.nfc.tech.Ndef;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
 
     // Referência para o Adaptador padrão NFC
     private NfcAdapter adaptadorNFC;
+
+    // RequestCode para o Contato Picker
+    private int SELECIONA_CONTATO_REQUEST_CODE = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,6 +179,38 @@ public class MainActivity extends AppCompatActivity {
             }
             boolean estadoUI = savedInstanceState.getBoolean(ESTADO_UI);
             ativaUI(estadoUI);
+        }
+    }
+
+    public void selecionaContato(View view){
+        if (view.getId() == R.id.buttonSelecionaContato) {
+            Intent selecionaContatoIntent = new Intent(Intent.ACTION_PICK, ContactsContract.CommonDataKinds.Phone.CONTENT_URI);
+            startActivityForResult(selecionaContatoIntent, SELECIONA_CONTATO_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SELECIONA_CONTATO_REQUEST_CODE) {
+            if (resultCode == RESULT_OK) {
+                // Recupera a URI do contato da resposta
+                Uri contatoUri = data.getData();
+                // Busca um Cursor para o contato
+                Cursor cursor = getContentResolver().query(contatoUri, null, null, null, null);
+                cursor.moveToFirst();
+
+                // Recupera o número da coluna dos campos nome e telefone
+                int colunaNome = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+                int colunaTelefone = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+
+                // Recupera os campos nome e telefone
+                String nome = cursor.getString(colunaNome);
+                String telefone = cursor.getString(colunaTelefone);
+
+                // Mostra os campos no LogCat
+                Log.d(getPackageName(), "Nome: " + nome + "\n Telefone: " + telefone);
+            }
         }
     }
 }
