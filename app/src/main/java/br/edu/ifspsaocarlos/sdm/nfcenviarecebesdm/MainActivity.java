@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
                 String telefone = cursor.getString(colunaTelefone);
 
                 // Mostra os campos no LogCat
-                Log.d(getPackageName(), "Nome: " + nome + "\n Telefone: " + telefone);
+                Log.d(getPackageName(), getString(R.string.nome) + nome + getString(R.string.telefone) + telefone);
             }
         }
     }
