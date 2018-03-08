@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">NFCEnviaRecebeSDM</string>
+    <string name="prepara_envio">Prepara envio</string>
+    <string name="mensagem_recebida">Mensagem recebida</string>
+</resources>

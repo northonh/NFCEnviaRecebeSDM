@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="br.edu.ifspsaocarlos.sdm.nfcenviarecebesdm.MainActivity">
+
+    <!-- Campo para digitar a mensagem que será enviada -->
+    <EditText
+        android:id="@+id/et_mensagem_enviar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!-- Botão que prepara o envio o texto do et_mensagem_enviar -->
+    <Button
+        android:id="@+id/bt_prepara_envio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="preparaEnvio"
+        android:text="@string/prepara_envio"/>
+
+    <!-- Label -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/mensagem_recebida"/>
+
+    <!-- Campo onde aparecem a mensagem recebida de outro dispositivo -->
+    <TextView
+        android:id="@+id/tv_mensagem_recebida"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
